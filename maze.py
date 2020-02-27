@@ -1,13 +1,14 @@
 """
   Class Maze defines a general structure of a maze
   which consists of a two-dimensional array of characters.
-  Each symbol on the maze represents eiehter a possible path
+  Each symbol on the maze represents either a possible path
   or a blocker.
  
   Students need to complete this class
 """
 
 import random     # random number generator
+import copy
 
 class Maze:
 
@@ -17,11 +18,11 @@ class Maze:
         self.MAXCOL = max_sol
         self.POSSIBLEPATH = ' '
         self.BLOCKER      = '*'
-        self.THEWAYOUT    = '!'
+        self.THEWAYOUT    = '0'
 
         self.PATH_BLOCKER_RATIO = 0.5
 
-        self.theMaze = self._genMaze()
+        self.theMaze = self._gen_maze()
 
     def _gen_maze( self ):
         """Generate a random maze based on probability"""
@@ -40,15 +41,26 @@ class Maze:
 
     def __str__( self ):
         """Generate a string representation of the maze"""
-        pass
+        string = ' 012345678901\n'
+        i = 0
+        # Add each maze 'tile' to the string individually
+        for row in range( len(self.theMaze) ):
+            string += str(i)
+            i += 1
+            if i == 10: 
+                i = 0
+            for col in range( len(self.theMaze[row]) ):
+                string += str( self.theMaze[row][col] )
+            string += '\n'
+        return string
 
     def get_col_size( self ):
         """Return column count"""
-        pass
+        return self.MAXCOL
 
     def get_row_size( self ):
         """Return row count"""
-        pass
+        return self.MAXROW
 
     def read_maze( self, file_name ):
         """Reading maze from a file.
@@ -58,25 +70,58 @@ class Maze:
            ** *
            ** *
            would be a 4x4 input maze."""
-        pass
+        # Opens the file requested
+        file = open( file_name, "r" )
+
+        i = 0
+        # Copy maze from the file over to self.theMaze
+        for line in file:
+            item = list(line) # makes list containing each 'tile' individually
+            for x in range(self.MAXROW):
+                self.theMaze[i][x] = item[x] 
+            i += 1
+            
+                
 
     def get_maze( self ):
         """Return a copy of the maze"""
-        pass
+        maze_copy = copy.deepcopy( self )
+        return maze_copy
 
     def is_clear( self, row, col ):
         """Return True if this cell is clear (pathway)."""
-        pass
+        if self.is_in_maze( row, col ):
+            
+            if self.theMaze[row][col] == self.POSSIBLEPATH:
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def is_in_maze( self, row, col ):
         """Return True if a cell is inside the maze."""
-        pass
+        if row < self.MAXROW:
+            if col < self.MAXCOL:
+                if row >= 0:
+                    if col >= 0:
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
 
     def set_value( self, row, col, value ):
         """Set the value to a cell in the maze."""
-        pass
-
+        if self.is_in_maze( row, col ) == True:
+            self.theMaze[row][col] = value
+            
     def get_value( self, row, col ):
         """Return the value of the current cell."""
-        pass
+        if self.is_in_maze( row, col ) == True:
+            return self.theMaze[row][col]
 
