@@ -6,3 +6,5 @@ Features three pre-defined maze files, or the user can request a randomly genera
 Algorithms based off:
   1. recurssion to find all possible exits
   2. Depth First Search approach utilizing a self-made Stack ADT to find an exit
+
+Run testmouse.py to see test the algorithms.
